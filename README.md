@@ -25,6 +25,9 @@
     ```sql
     ORDER BY column_name DESC; -- Use DESC for descending order
     ```
+* **WHERE  -> filters rows. HAVING -> filters groups (after GROUP BY)**
+
+**Aggregate function in WHERE? → probably needs HAVING.**
 
 ## 🔗 Joins
 
