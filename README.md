@@ -67,3 +67,41 @@
 
 ### 1581. Customer Who Visited but Did Not Make Any Transactions
 *(Add your specific query notes, edge cases, or solutions for this problem here)*
+
+### Uncorrelated query
+
+```sql
+
+SELECT
+
+    r.contest_id,
+
+    COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Users)
+
+FROM Register r
+
+GROUP BY r.contest_id;
+
+```
+
+Here,
+
+```sql
+
+(SELECT COUNT(*) FROM Users)
+
+```
+
+is an **uncorrelated subquery** because it does not reference any column from the outer query (`r`).
+
+Since it is independent of the outer query, the database optimizer typically evaluates it **once**:
+
+```text
+
+SELECT COUNT(*) FROM Users
+
+→ 5
+
+```
+
+and then reuses that value for every group.
