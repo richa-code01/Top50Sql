@@ -129,6 +129,26 @@ WHERE (customer_id, order_date) IN (
 This returns the row(s) containing the earliest order date for each customer.
 **Having** is used when we want to filter whole group itself.
 ---
+### GROUP BY Rule
+
+After a `GROUP BY`, every column in the `SELECT` clause must be either:
+
+1. Present in the `GROUP BY` clause, **or**
+2. Wrapped in an aggregate function such as:
+   - `SUM()`
+   - `COUNT()`
+   - `MIN()`
+   - `MAX()`
+   - `AVG()`
+
+Otherwise, the query is **invalid** (in standard SQL and MySQL with `ONLY_FULL_GROUP_BY` enabled) or may produce **nondeterministic results** (in some MySQL configurations i.e choose any arbitrary value fromt the group for that column).
+
+#### Valid Examples
+
+```sql
+SELECT product_id, COUNT(*)
+FROM Sales
+GROUP BY product_id;
 
 ### Adding Days to a Date in MySQL
 
