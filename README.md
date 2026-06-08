@@ -105,3 +105,57 @@ SELECT COUNT(*) FROM Users
 ```
 
 and then reuses that value for every group.
+
+### Selecting a Specific Row from Each Group
+
+Suppose we want the **first order of every customer**.
+
+```sql
+SELECT
+    ROUND(
+        AVG(customer_pref_delivery_date = order_date) * 100,
+        2
+    ) AS immediate_percentage
+FROM Delivery d
+WHERE (customer_id, order_date) IN (
+    SELECT
+        customer_id,
+        MIN(order_date)
+    FROM Delivery
+    GROUP BY customer_id
+);
+```
+
+This returns the row(s) containing the earliest order date for each customer.
+
+---
+
+### Adding Days to a Date in MySQL
+
+#### Add 1 Day
+
+```sql
+SELECT DATE_ADD(order_date, INTERVAL 1 DAY)
+FROM Delivery;
+```
+#### Subtract 1 Day
+
+```sql
+SELECT DATE_SUB(order_date, INTERVAL 1 DAY)
+FROM Delivery;
+```
+
+---
+
+### Quick Reference
+
+| Task | MySQL Syntax |
+|--------|--------|
+| Earliest date | `MIN(date_col)` |
+| Latest date | `MAX(date_col)` |
+| Add 1 day | `DATE_ADD(date_col, INTERVAL 1 DAY)` |
+| Subtract 1 day | `DATE_SUB(date_col, INTERVAL 1 DAY)` |
+| Extract month | `MONTH(date_col)` |
+| Extract year | `YEAR(date_col)` |
+| Extract year-month | `DATE_FORMAT(date_col, '%Y-%m')` |
+| Select row with min value per group | `WHERE (group_col, value_col) IN (SELECT group_col, MIN(value_col) ... GROUP BY group_col)` |
