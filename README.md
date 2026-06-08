@@ -127,7 +127,7 @@ WHERE (customer_id, order_date) IN (
 ```
 
 This returns the row(s) containing the earliest order date for each customer.
-
+**Having** is used when we want to filter whole group itself.
 ---
 
 ### Adding Days to a Date in MySQL
