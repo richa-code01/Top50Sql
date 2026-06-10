@@ -179,3 +179,143 @@ FROM Delivery;
 | Extract year | `YEAR(date_col)` |
 | Extract year-month | `DATE_FORMAT(date_col, '%Y-%m')` |
 | Select row with min value per group | `WHERE (group_col, value_col) IN (SELECT group_col, MIN(value_col) ... GROUP BY group_col)` |
+
+# Window Functions in SQL
+
+A **window function** performs calculations across a set of related rows while **preserving all rows** in the result.
+
+## Aggregate vs Window Function
+
+### Aggregate Function
+
+```sql
+SELECT SUM(weight)
+FROM Queue;
+```
+
+Returns a single row.
+
+### Window Function
+
+```sql
+SELECT person_name,
+       SUM(weight) OVER (ORDER BY turn) AS running_total
+FROM Queue;
+```
+
+Returns every row along with a running total.
+
+---
+
+## Window Function Syntax
+
+```sql
+function(...) OVER (...)
+```
+
+Example:
+
+```sql
+SUM(weight) OVER (ORDER BY turn)
+```
+
+- `SUM(weight)` → calculation to perform
+- `OVER(...)` → defines the window
+- `ORDER BY turn` → order in which the calculation is applied
+
+---
+
+# LeetCode 1204: Last Person to Fit in the Bus
+
+### Idea
+
+Compute the **cumulative weight** of passengers in boarding order and find the last person whose cumulative weight does not exceed **1000 kg**.
+
+### Solution
+
+```sql
+SELECT person_name
+FROM (
+    SELECT person_name,
+           SUM(weight) OVER (ORDER BY turn) AS total_weight
+    FROM Queue
+) t
+WHERE total_weight <= 1000
+ORDER BY total_weight DESC
+LIMIT 1;
+```
+
+### Example
+
+Input:
+
+| person_name | weight | turn |
+|------------|--------|------|
+| Alice | 250 | 1 |
+| Bob | 175 | 2 |
+| Alex | 400 | 3 |
+| John | 500 | 4 |
+
+After:
+
+```sql
+SUM(weight) OVER (ORDER BY turn)
+```
+
+| person_name | total_weight |
+|------------|-------------|
+| Alice | 250 |
+| Bob | 425 |
+| Alex | 825 |
+| John | 1325 |
+
+Filter:
+
+```sql
+WHERE total_weight <= 1000
+```
+
+| person_name | total_weight |
+|------------|-------------|
+| Alice | 250 |
+| Bob | 425 |
+| Alex | 825 |
+
+The last valid passenger is:
+
+```text
+Alex
+```
+
+---
+
+## Common Window Functions
+
+```sql
+ROW_NUMBER() OVER (ORDER BY salary DESC)
+```
+
+```sql
+LAG(salary) OVER (ORDER BY year)
+```
+
+```sql
+LEAD(salary) OVER (ORDER BY year)
+```
+
+```sql
+AVG(score) OVER (ORDER BY test_id)
+```
+
+### Quick Rule
+
+Use **window functions** when you need:
+
+- Running totals
+- Running averages
+- Rankings
+- Previous/next row values
+
+without losing individual rows.
+
+
