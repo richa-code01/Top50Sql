@@ -414,3 +414,23 @@ Think of it as:
 WITH = Create a temporary table to work with
 ```
 
+### Finding Unique (Non-Repeating) Values
+
+```sql
+
+SELECT column_name
+
+FROM table_name
+
+GROUP BY column_name
+
+HAVING COUNT(*) = 1;
+
+```
+
+- `GROUP BY` groups identical values together.
+
+- `HAVING COUNT(*) = 1` keeps only values that appear exactly once.
+
+---
+
