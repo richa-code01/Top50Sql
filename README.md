@@ -456,3 +456,97 @@ Useful for:
 - Top K scores per category
 - Highest K values per group
 ```
+
+### OFFSET in SQL
+
+```sql
+LIMIT 1 OFFSET k
+```
+
+- Skips the first `k` rows after sorting/filtering.
+- Returns the next row(s) specified by `LIMIT`.
+
+Example:
+
+```sql
+SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;
+```
+
+Returns the **second highest distinct salary**.
+
+---
+
+### Returning NULL When No Row Exists
+
+```sql
+SELECT (
+    subquery
+) AS result;
+```
+
+- A scalar subquery returns its value if a row exists.
+- If the subquery returns no rows, SQL automatically returns `NULL`.
+- Useful for problems where the expected output should be `NULL` instead of an empty result.
+
+Example:
+
+```sql
+SELECT (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+) AS SecondHighestSalary;
+```
+
+Returns `NULL` if a second highest salary does not exist.
+
+### LIKE in SQL
+
+`LIKE` is used for pattern matching in strings.
+
+#### Wildcards
+
+```sql
+
+%  -- Matches zero or more characters
+
+_  -- Matches exactly one character
+
+```
+
+---
+### Important Limitation
+
+`LIKE` supports only:
+
+```sql
+
+%
+
+_
+
+```
+
+It does **not** support character ranges such as:
+
+```text
+
+[a-z]
+
+[A-Z]
+
+[0-9]
+
+```
+
+For complex pattern matching, use `REGEXP`.
+
+Example:
+
+```sql
+
+WHERE mail REGEXP '^[A-Za-z][A-Za-z0-9]*@leetcode\\.com$'
