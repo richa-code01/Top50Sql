@@ -390,3 +390,27 @@ LIMIT 1;
 
 Similarly, use `ORDER BY ... ASC LIMIT 1` to find the row with the minimum value.
 
+### Common Table Expression (CTE) - `WITH`
+
+```sql
+WITH ids AS (
+    SELECT DISTINCT requester_id AS id
+    FROM RequestAccepted
+
+    UNION
+
+    SELECT DISTINCT accepter_id AS id
+    FROM RequestAccepted
+)
+```
+
+- `WITH` creates a temporary result set (CTE) that can be referenced like a table in the main query.
+- Useful when a complex subquery needs to be reused or when creating an intermediate table improves readability.
+- The CTE exists only for the duration of the query.
+
+Think of it as:
+
+```text
+WITH = Create a temporary table to work with
+```
+
