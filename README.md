@@ -319,3 +319,74 @@ Use **window functions** when you need:
 without losing individual rows.
 
 
+# SQL JOIN Time Complexity
+
+Assume:
+
+- Table A has `N` rows
+- Table B has `M` rows
+
+## Without Index (Nested Loop Join)
+
+For each row in A, scan all rows in B.
+
+```text
+Time Complexity: O(N × M)
+```
+
+---
+
+## With Index on Join Column
+
+For each row in A, perform an indexed lookup in B.
+
+```text
+Time Complexity: O(N log M)
+```
+
+---
+
+## Hash Join (Common in Modern Databases)
+
+Build a hash table on one table and scan the other.
+
+```text
+Time Complexity: O(N + M)
+```
+
+---
+
+## Interview / LeetCode Assumption
+
+For queries like:
+
+```sql
+SELECT *
+FROM A
+JOIN B
+ON A.id = B.id;
+```
+
+assume:
+
+```text
+JOIN = O(N + M)
+```
+
+unless the problem explicitly indicates the absence of indexes or requires nested scans.
+
+### Finding Maximum Value
+
+```sql
+SELECT *
+FROM table_name
+ORDER BY column_name DESC
+LIMIT 1;
+```
+
+- `ORDER BY ... DESC` sorts values from largest to smallest.
+- `LIMIT 1` returns the row with the maximum value.
+- Useful when you need the entire row, not just the maximum value.
+
+Similarly, use `ORDER BY ... ASC LIMIT 1` to find the row with the minimum value.
+
