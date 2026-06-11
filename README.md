@@ -433,4 +433,26 @@ HAVING COUNT(*) = 1;
 - `HAVING COUNT(*) = 1` keeps only values that appear exactly once.
 
 ---
+### Top K Distinct Values per Group
 
+```sql
+DENSE_RANK() OVER (
+    PARTITION BY group_column
+    ORDER BY value DESC
+)
+```
+
+- `PARTITION BY` creates groups.
+- `ORDER BY ... DESC` ranks highest values first.
+- `DENSE_RANK()` assigns the same rank to equal values.
+- Filter using:
+
+```sql
+WHERE rank <= K
+```
+
+Useful for:
+- Top 3 salaries per department
+- Top K scores per category
+- Highest K values per group
+```
